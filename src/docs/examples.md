@@ -18,11 +18,11 @@ Other datasets available on the same webpage, like [OHSUMED](http://boston.lti.c
 
 ```
 ludwig experiment \
-  --data_csv text_classification.csv \
-  --model_definition_file model_definition.yaml
+  --dataset text_classification.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -49,11 +49,11 @@ Named Entity Recognition Tagging
 
 ```
 ludwig experiment \
-  --data_csv sequence_tags.csv \
-  --model_definition_file model_definition.yaml
+  --dataset sequence_tags.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -86,11 +86,11 @@ Natural Language Understanding
 
 ```
 ludwig experiment \
-  --data_csv nlu.csv \
-  --model_definition_file model_definition.yaml
+  --dataset nlu.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -131,11 +131,11 @@ Machine Translation
 
 ```
 ludwig experiment \
-  --data_csv translation.csv \
-  --model_definition_file model_definition.yaml
+  --dataset translation.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -178,11 +178,11 @@ Chit-Chat Dialogue Modeling through Sequence2Sequence
 
 ```
 ludwig experiment \
-  --data_csv chitchat.csv \
-  --model_definition_file model_definition.yaml
+  --dataset chitchat.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -221,11 +221,11 @@ Sentiment Analysis
 
 ```
 ludwig experiment \
-  --data_csv sentiment.csv \
-  --model_definition_file model_definition.yaml
+  --dataset sentiment.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -253,11 +253,11 @@ Image Classification
 
 ```
 ludwig experiment \
-  --data_csv image_classification.csv \
-  --model_definition_file model_definition.yaml
+  --dataset image_classification.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -277,7 +277,8 @@ Image Classification (MNIST)
 This is a complete example of training an image classification model on the MNIST
 dataset.
 
-## Download the MNIST dataset.
+## Download the MNIST dataset
+
 ```
 git clone https://github.com/myleott/mnist_png.git
 cd mnist_png/
@@ -285,7 +286,8 @@ tar -xf mnist_png.tar.gz
 cd mnist_png/
 ```
 
-## Create train and test CSVs.
+## Create train and test CSVs
+
 Open python shell in the same directory and run this:
 ```
 import os
@@ -309,17 +311,17 @@ containing 60000 and 10000 examples correspondingly and having the following for
 | training/0/24537.png |  0    |
 | training/0/25629.png |  0    |
 
-## Train a model.
+## Train a model
 
 From the directory where you have virtual environment with ludwig installed:
 ```
 ludwig train \
-  --data_train_csv <PATH_TO_MNIST_DATASET_TRAINING_CSV> \
-  --data_test_csv <PATH_TO_MNIST_DATASET_TEST_CSV> \
-  --model_definition_file model_definition.yaml
+  --training_set <PATH_TO_MNIST_DATASET_TRAINING_CSV> \
+  --test_set <PATH_TO_MNIST_DATASET_TEST_CSV> \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -338,11 +340,11 @@ input_features:
                 filter_size: 3
                 pool_size: 2
                 pool_stride: 2
-                dropout: true
+                dropout: 0.4
         fc_layers:
             -
                 fc_size: 128
-                dropout: true
+                dropout: 0.4
 
 output_features:
     -
@@ -350,7 +352,7 @@ output_features:
         type: category
 
 training:
-    dropout_rate: 0.4
+    early_stop: 5
 ```
 
 Image Captioning
@@ -364,11 +366,11 @@ Image Captioning
 
 ```
 ludwig experiment \
---data_csv image captioning.csv \
-  --model_definition_file model_definition.yaml
+--dataset image captioning.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -402,11 +404,11 @@ The task is, given two images of two handwritten characters, recognize if they a
 
 ```
 ludwig experiment \
---data_csv balinese_characters.csv \
-  --model_definition_file model_definition.yaml
+--dataset balinese_characters.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -451,11 +453,11 @@ Visual Question Answering
 
 ```
 ludwig experiment \
---data_csv vqa.csv \
-  --model_definition_file model_definition.yaml
+--dataset vqa.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -485,7 +487,7 @@ Spoken Digit Speech Recognition
 
 This is a complete example of training an spoken digit speech recognition model on the "MNIST dataset of speech recognition". 
 
-## Download the free spoken digit dataset.
+## Download the free spoken digit dataset
 
 ```
 git clone https://github.com/Jakobovski/free-spoken-digit-dataset.git
@@ -494,7 +496,7 @@ cp -r free-spoken-digit-dataset/recordings speech_recog_digit_data
 cd speech_recog_digit_data
 ```
 
-## Create an experiment CSV.
+## Create an CSV dataset
 
 ```
 echo "audio_path","label" >> "spoken_digit.csv"
@@ -518,17 +520,17 @@ Now you should have `spoken_digit.csv` containing 2000 examples having the follo
 | .../speech_recog_digit_data/recordings/1_jackson_0.wav  | 1                                         |
 
 
-## Train a model. 
+## Train a model
 
 From the directory where you have virtual environment with ludwig installed: 
 
 ```
 ludwig experiment \
-  --data_csv <PATH_TO_SPOKEN_DIGIT_CSV> \
-  --model_definition_file model_definition_file.yaml
+  --dataset <PATH_TO_SPOKEN_DIGIT_CSV> \
+  --config_file config_file.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -551,17 +553,17 @@ input_features:
                 filter_size: 6
                 pool_size: 4
                 pool_stride: 4
-                dropout: true
+                dropout: 0.4
             -
                 num_filters: 32
                 filter_size: 3
                 pool_size: 2
                 pool_stride: 2
-                dropout: true
+                dropout: 0.4
         fc_layers:
             -
                 fc_size: 64
-                dropout: true
+                dropout: 0.4
 
 output_features:
     -
@@ -569,7 +571,6 @@ output_features:
         type: category
 
 training:
-    dropout_rate: 0.4
     early_stop: 10
 ```
 
@@ -591,11 +592,11 @@ The sample data looks as follows:
 
 ```
 ludwig experiment \
---data_csv speaker_verification.csv \
-  --model_definition_file model_definition.yaml
+--dataset speaker_verification.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -636,11 +637,11 @@ The full data and the column descriptions can be found [here](https://www.kaggle
 After downloading the data, to train a model on this dataset using Ludwig,
 ```
 ludwig experiment \
-  --data_csv <PATH_TO_TITANIC_CSV> \
-  --model_definition_file model_definition.yaml
+  --dataset <PATH_TO_TITANIC_CSV> \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -692,11 +693,11 @@ While direct timeseries prediction is a work in progress Ludwig can ingest times
 
 ```
 ludwig experiment \
---data_csv timeseries_data.csv \
-  --model_definition_file model_definition.yaml
+--dataset timeseries_data.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -772,11 +773,11 @@ df.to_csv('<PATH_TO_FILE>/temperature_la.csv')
 
 ```
 ludwig experiment \
---data_csv <PATH_TO_FILE>/temperature_la.csv \
-  --model_definition_file model_definition.yaml
+--dataset <PATH_TO_FILE>/temperature_la.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -805,11 +806,11 @@ Movie rating prediction
 
 ```
 ludwig experiment \
---data_csv movie_ratings.csv \
-  --model_definition_file model_definition.yaml
+--dataset movie_ratings.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -844,11 +845,11 @@ Multi-label classification
 
 ```
 ludwig experiment \
---data_csv image_data.csv \
-  --model_definition_file model_definition.yaml
+--dataset image_data.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -877,11 +878,11 @@ This example is inspired by the classic paper [Natural Language Processing (Almo
 
 ```
 ludwig experiment \
---data_csv nl_data.csv \
-  --model_definition_file model_definition.yaml
+--dataset nl_data.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
@@ -922,11 +923,11 @@ This example replicates the Keras example at https://www.tensorflow.org/tutorial
 
 ```
 ludwig experiment \
---data_csv auto_mpg.csv \
-  --model_definition_file model_definition.yaml
+--dataset auto_mpg.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 training:
@@ -980,11 +981,11 @@ Binary Classification: Fraud Transactions Identification
 
 ```
 ludwig experiment \
---data_csv transactions.csv \
-  --model_definition_file model_definition.yaml
+--dataset transactions.csv \
+  --config_file config.yaml
 ```
 
-With `model_definition.yaml`:
+With `config.yaml`:
 
 ```yaml
 input_features:
